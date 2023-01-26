@@ -1,0 +1,24 @@
+{
+    "startup":
+    [
+        ["cv", "images/start/logo.jpg"], 
+        ["cv", "images/start/start.jpg"], 
+        ["ocr", ["text", "开始唤醒"]]
+    ], 
+    "WB-9":
+    [
+        ["cv", "images/level/dengLinYi/dengLinYi.jpg"], 
+        ["cv", "images/level/dengLinYi/chengZhongDiaoCha.jpg"], 
+        ["ocr", ["text", "WB-9"]]
+    ], 
+    "startXD": 
+    [
+        ["cv", "images/start_end_XD/startXD1.jpg"], 
+        ["cv", "images/start_end_XD/startXD2.jpg"]
+    ], 
+    "backHome":
+    [
+        ["cv", "images/back_home/home_btn.jpg"], 
+        ["ocr", ["text", "首页"]]
+    ]
+}
