@@ -99,6 +99,11 @@ def clear_san(level: str):
         level: 关卡名
     :return
     """
+    # 不在主页就返回主页
+    if not get_every(cv_tools.text_match(win_tools.win_shot(), text="基建")['text']):
+        print("返回主页...")
+        back_home()
+    
     print(f"开始清理智...")
     
     # 从json中获取关卡对应图像所在地址
@@ -114,14 +119,14 @@ def clear_san(level: str):
                                                           re_rule=[
                                                               r"^-\d{1,2}$", 
                                                               r"^\d{1,3}/\d{2,3}$"
-                                                          ])["re_rule"])
+                                                          ])['re_rule'])
     while (not cost_san_text) or (not remain_san_text):
         cost_san_text, remain_san_text = get_every(
                                           cv_tools.text_match(win_tools.win_shot(), 
                                                               re_rule=[
                                                                   r"^-\d{1,2}$", 
                                                                   r"^\d{1,3}/\d{2,3}$"
-                                                              ])["re_rule"])
+                                                              ])['re_rule'])
     cost_san = int(cost_san_text[1].replace('-', ''))
     remain_san = int(remain_san_text[1].split('/')[0])
     
@@ -134,10 +139,10 @@ def clear_san(level: str):
         
         # 待机至检测到 '行动结束'
         pos = get_every(cv_tools.text_match(win_tools.win_shot(), 
-                                            text="行动结束")["text"])
+                                            text="行动结束")['text'])
         while not pos:
             pos = get_every(cv_tools.text_match(win_tools.win_shot(), 
-                                                text="行动结束")["text"])
+                                                text="行动结束")['text'])
             time.sleep(5)
         x, y, w, h = pos[0]
         
@@ -146,14 +151,14 @@ def clear_san(level: str):
         time.sleep(3)
         # 检测剩余理智, 准备进入下一轮循环
         remain_san_text = get_every(cv_tools.text_match(win_tools.win_shot(), 
-                                              re_rule=r"^\d{1,3}/\d{2,3}$")["re_rule"])
+                                              re_rule=r"^\d{1,3}/\d{2,3}$")['re_rule'])
         while not remain_san_text:
             remain_san_text = get_every(cv_tools.text_match(win_tools.win_shot(), 
-                                                  re_rule=r"^\d{1,3}/\d{2,3}$")["re_rule"])
+                                                  re_rule=r"^\d{1,3}/\d{2,3}$")['re_rule'])
         remain_san = int(remain_san_text[1].split('/')[0])
         
     # 返回主页
-    print("回到主页...")
+    print("返回主页...")
     back_home()
         
     print("理智已清完...")
@@ -216,7 +221,7 @@ def back_home():
     返回主页
     """
     jump_to(get_json_data("backHome"), delay_jump=2)
-        
+
 
 def get_every(result):
     """

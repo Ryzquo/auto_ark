@@ -11,6 +11,7 @@ shot.png
 
 # 不排除.gitignore
 !.gitignore
+!/platform-tools/
 
 # python
 # Byte-compiled / optimized / DLL files
