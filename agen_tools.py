@@ -135,7 +135,6 @@ def clear_san(level: str):
         # 待机至检测到 '行动结束'
         pos = get_every(cv_tools.text_match(win_tools.win_shot(), 
                                             text="行动结束")["text"])
-        print(pos)
         while not pos:
             pos = get_every(cv_tools.text_match(win_tools.win_shot(), 
                                                 text="行动结束")["text"])
