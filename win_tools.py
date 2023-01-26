@@ -23,8 +23,7 @@ def connect_adb(connect_times: int=5):
     """
     连接adb
     :params
-        adb: adb 程序路径
-        adb_address: adb 连接地址
+        connect_times: 连接次数
     :return
         是否连接成功: bool
     """
@@ -41,12 +40,11 @@ def connect_adb(connect_times: int=5):
     return connect_status
 
 
-def disconnect_adb(connect_times: int=5):
+def disconnect_adb(disconnect_times: int=5):
     """
     断开adb连接
     :params
-        adb: adb 程序路径
-        adb_address: adb 连接地址
+        disconnect_times: 断开连接次数
     :return
         是否连接成功: bool
     """
@@ -54,7 +52,7 @@ def disconnect_adb(connect_times: int=5):
     if connect_status:
         return connect_status
     
-    for i in range(connect_times):
+    for i in range(disconnect_times):
         os.system(f"{adb} disconnect {adb_address}")
         connect_status = not adb_connect_status()
         if connect_status:
@@ -67,8 +65,6 @@ def adb_connect_status():
     """
     检测adb与指定设备的连接状态
     :params
-        adb: adb 程序路径
-        adb_address: adb 连接地址
     :return
         连接状态: bool
     """
@@ -88,9 +84,9 @@ def win_shot(
     """
     根据窗口句柄后台截图
     :params
-        adb: adb 程序路径
+        img_path: 截图保存路径
     :return
-        截图地址
+        截图路径
     """
     img_path = img_path.replace('\\', '/')
     # os.system(f"{adb} exec-out screencap -p > {img_path}")

@@ -169,8 +169,6 @@ def jump_to(targets: list, delay_jump: int=3):
     根据传入的路径跳转到对应界面
     :params
         targets: 路径列表
-        adb: adb程序路径
-        adb_address: adb 连接地址
         delay_jump: 界面间的切换时间
     :return
     """
