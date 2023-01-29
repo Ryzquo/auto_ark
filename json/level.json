@@ -7,6 +7,7 @@
     ], 
     "WB-9":
     [
+        ["ocr", ["text", "终端"]], 
         ["cv", "images/level/dengLinYi/dengLinYi.jpg"], 
         ["cv", "images/level/dengLinYi/chengZhongDiaoCha.jpg"], 
         ["ocr", ["text", "WB-9"]]
