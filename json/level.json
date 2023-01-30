@@ -1,25 +1,197 @@
 {
-    "startup":
-    [
-        ["cv", "images/start/logo.jpg"], 
-        ["cv", "images/start/start.jpg"], 
-        ["ocr", ["text", "开始唤醒"]]
-    ], 
     "WB-9":
     [
-        ["ocr", ["text", "终端"]], 
-        ["cv", "images/level/dengLinYi/dengLinYi.jpg"], 
-        ["cv", "images/level/dengLinYi/chengZhongDiaoCha.jpg"], 
-        ["ocr", ["text", "WB-9"]]
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/level/dengLinYi/dengLinYi.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/level/dengLinYi/chengZhongDiaoCha.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "WB-9"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
     ], 
-    "startXD": 
+    "LS-6":
     [
-        ["cv", "images/start_end_XD/startXD1.jpg"], 
-        ["cv", "images/start_end_XD/startXD2.jpg"]
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/ZhongDuan/ziYuanShouJi.jpg", 
+            "roi": [["bottom", 0.11], ["top", 0.8]], 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "战术演习"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": [
+                [[0.5, 0.5], [0.7, 0.5]], 
+                [[0.5, 0.5], [0.3, 0.5]]
+            ]
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "LS-6"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
     ], 
-    "backHome":
+    "PR-A-2":
     [
-        ["cv", "images/back_home/home_btn.jpg"], 
-        ["ocr", ["text", "首页"]]
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/ZhongDuan/ziYuanShouJi.jpg", 
+            "roi": [["bottom", 0.11], ["top", 0.8]], 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "固若金汤"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": [
+                [[0.5, 0.5], [0.7, 0.5]], 
+                [[0.5, 0.5], [0.3, 0.5]]
+            ]
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "PR-A-2"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
+    ], 
+    "PR-A-1":
+    [
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/ZhongDuan/ziYuanShouJi.jpg", 
+            "roi": [["bottom", 0.11], ["top", 0.8]], 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "固若金汤"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": [
+                [[0.5, 0.5], [0.7, 0.5]], 
+                [[0.5, 0.5], [0.3, 0.5]]
+            ]
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "PR-A-1"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
+    ], 
+    "PR-B-2":
+    [
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/ZhongDuan/ziYuanShouJi.jpg", 
+            "roi": [["bottom", 0.11], ["top", 0.8]], 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "摧枯拉朽"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": [
+                [[0.5, 0.5], [0.7, 0.5]], 
+                [[0.5, 0.5], [0.3, 0.5]]
+            ]
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "PR-B-2"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
+    ]
+    , 
+    "PR-B-1":
+    [
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/ZhongDuan/ziYuanShouJi.jpg", 
+            "roi": [["bottom", 0.11], ["top", 0.8]], 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "摧枯拉朽"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": [
+                [[0.5, 0.5], [0.7, 0.5]], 
+                [[0.5, 0.5], [0.3, 0.5]]
+            ]
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "PR-B-1"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
     ]
 }

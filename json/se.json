@@ -1,0 +1,55 @@
+{
+    "startup":
+    [
+        {
+            "ope": "cv", 
+            "val": "images/start/logo.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/start/start.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "开始唤醒"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
+    ], 
+    "startXD": 
+    [
+        {
+            "ope": "cv", 
+            "val": "images/start_end_XD/startXD1.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/start_end_XD/startXD2.jpg", 
+            "roi": false, 
+            "swipe": false
+        }
+    ], 
+    "backHome":
+    [
+        {
+            "ope": "cv", 
+            "val": "images/back_home/home_btn.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "首页"], 
+            "x1": false, "y1": false, 
+            "x2": false, "y2": false, 
+            "swipe": false
+        }
+    ]
+}
