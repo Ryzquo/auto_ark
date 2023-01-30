@@ -157,7 +157,6 @@ with open(levels_path, encoding="UTF-8") as fp:
         levels.append(Level.from_json(data))
 
 if __name__ == "__main__":
-    calc = Calc(1600, 900)
     code = "WB-9"
     img = cv2.imread("E:/Chrome/t1.png")
     h, w = img.shape[:2]

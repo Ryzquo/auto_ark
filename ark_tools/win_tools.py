@@ -3,6 +3,7 @@
 
 import os
 import time
+import subprocess
 import win32gui, win32api
 
 import win32com.client
@@ -34,7 +35,7 @@ def connect_adb(connect_times: int=5):
     print("连接adb中...")
     for i in range(connect_times):
         print(f"第{i+1}次.")
-        os.system(f"{adb} connect {adb_address}")
+        subprocess.call(f"{adb} connect {adb_address}")
         connect_status = adb_connect_status()
         if connect_status:
             break 
@@ -55,7 +56,7 @@ def disconnect_adb(disconnect_times: int=5):
         return connect_status
     
     for i in range(disconnect_times):
-        os.system(f"{adb} disconnect {adb_address}")
+        subprocess.call(f"{adb} disconnect {adb_address}")
         connect_status = not adb_connect_status()
         if connect_status:
             break 
@@ -84,17 +85,17 @@ def win_shot(
     img_path: str=os.path.join(dir, "shot.png")
 ):
     """
-    根据窗口句柄后台截图
+    adb截图
     :params
-        img_path: 截图保存路径
+        img_path: 截图保存路径, 默认根目录下
     :return
         截图路径
     """
     img_path = img_path.replace('\\', '/')
-    # os.system(f"{adb} exec-out screencap -p > {img_path}")
-    os.system(f"{adb} -s {adb_address} shell screencap /sdcard/Download/shot.png")
-    os.system(f"{adb} -s {adb_address} pull /sdcard/Download/shot.png {img_path}")
-    os.system(f"{adb} -s {adb_address} shell rm /sdcard/Download/shot.png")
+    # subprocess.call(f"{adb} exec-out screencap -p > {img_path}")
+    subprocess.call(f"{adb} -s {adb_address} shell screencap /sdcard/Download/shot.png")
+    subprocess.call(f"{adb} -s {adb_address} pull /sdcard/Download/shot.png {img_path}")
+    subprocess.call(f"{adb} -s {adb_address} shell rm /sdcard/Download/shot.png")
     
     return img_path
 
@@ -103,11 +104,26 @@ def adb_click(
     x, y
 ):
     """
-    使用adb点击
+    adb点击
     :params
+        x, y: 坐标
     :return
     """
-    os.system(f"{adb} -s {adb_address} shell input tap {x} {y}")
+    subprocess.call(f"{adb} -s {adb_address} shell input tap {x} {y}")
+    
+    return True
+
+
+def adb_swipe(pt1, pt2):
+    """
+    滑动
+    :params
+        pt1: (x, y) 起点
+        pt2: (x, y) 终点
+    :return
+    """
+    x1, y1, x2, y2 = *pt1, *pt2
+    subprocess.call(f"{adb} -s {adb_address} shell input swipe {x1} {y1} {x2} {y2}")
     
     return True
 
