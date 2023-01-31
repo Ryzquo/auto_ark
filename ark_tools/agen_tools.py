@@ -51,7 +51,7 @@ def start_ark(path_emulator: str):
         return
     print("adb连接成功...")
     
-    if get_every(cv_tools.text_match(win_tools.win_shot(), text="明日方舟")['text']):
+    if get_every_first(cv_tools.text_match(win_tools.win_shot(), text="明日方舟")):
         startup()
         
     clear_san(cur_level)
@@ -96,9 +96,9 @@ def startup(start_time: int=15):
     time.sleep(start_time)
     
     # 关闭公告
-    if cv_tools.text_match(win_tools.win_shot(), text="公告")['text'][0]:
+    if cv_tools.text_match(win_tools.win_shot(), text="公告")[0]:
         print("检测到公告页, 关闭中...")
-        x, y, w, h = get_every(
+        x, y, w, h = get_every_first(
             cv_tools.img_match(win_tools.win_shot(), 
                                os.path.join(dir, 'images/start/close_gg.jpg'))
         )
@@ -113,7 +113,7 @@ def clear_san(level: str):
     :return
     """
     # 不在主页就返回主页
-    if not get_every(cv_tools.text_match(win_tools.win_shot(), text="基建")['text']):
+    if not get_every_first(cv_tools.text_match(win_tools.win_shot(), text="基建")):
         print("返回主页...")
         back_home()
     
@@ -127,19 +127,19 @@ def clear_san(level: str):
     # 开始->进入循环, 理智不够停止
     # 检测花费理智与剩余理智
     print("检测理智...")
-    cost_san_text, remain_san_text = get_every(
+    cost_san_text, remain_san_text = get_every_first(
                                       cv_tools.text_match(win_tools.win_shot(), 
-                                                          re_rule=[
-                                                              r"^-\d{1,2}$", 
-                                                              r"^\d{1,3}/\d{2,3}$"
-                                                          ], x1=20)['re_rule'])
+                                                          text=[
+                                                              r"$^-\d{1,2}$", 
+                                                              r"$^\d{1,3}/\d{2,3}$"
+                                                          ], x1=20))
     while (not cost_san_text) or (not remain_san_text):
-        cost_san_text, remain_san_text = get_every(
+        cost_san_text, remain_san_text = get_every_first(
                                           cv_tools.text_match(win_tools.win_shot(), 
-                                                              re_rule=[
-                                                                  r"^-\d{1,2}$", 
-                                                                  r"^\d{1,3}/\d{2,3}$"
-                                                              ], x1=20)['re_rule'])
+                                                              text=[
+                                                                  r"$^-\d{1,2}$", 
+                                                                  r"$^\d{1,3}/\d{2,3}$"
+                                                              ], x1=20))
     cost_san = int(cost_san_text[1].replace('-', ''))
     remain_san = int(remain_san_text[1].split('/')[0])
     
@@ -151,11 +151,11 @@ def clear_san(level: str):
         jump_to(get_json_data(se_json, "startXD"))
         
         # 待机至检测到 '行动结束'
-        pos = get_every(cv_tools.text_match(win_tools.win_shot(), 
-                                            text="行动结束")['text'])
+        pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
+                                            text="行动结束"))
         while not pos:
-            pos = get_every(cv_tools.text_match(win_tools.win_shot(), 
-                                                text="行动结束")['text'])
+            pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
+                                                text="行动结束"))
             time.sleep(5)
         x, y, w, h = pos[0]
         
@@ -163,13 +163,13 @@ def clear_san(level: str):
         win_tools.adb_click(int(x+w/2), int(y+h/2))
         time.sleep(3)
         # 检测剩余理智, 准备进入下一轮循环
-        remain_san_text = get_every(cv_tools.text_match(win_tools.win_shot(), 
+        remain_san_text = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
                                               re_rule=r"^\d{1,3}/\d{2,3}$", 
-                                              x1=20)['re_rule'])
+                                              x1=20))
         while not remain_san_text:
-            remain_san_text = get_every(cv_tools.text_match(win_tools.win_shot(), 
+            remain_san_text = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
                                                   re_rule=r"^\d{1,3}/\d{2,3}$", 
-                                                  x1=20)['re_rule'])
+                                                  x1=20))
         remain_san = int(remain_san_text[1].split('/')[0])
         
     # 返回主页
@@ -200,7 +200,7 @@ def jump_to(targets: list, delay_jump: int=3):
             roi = tar['roi']
             # 获取位置信息
             if swipe:
-                pos = get_every(cv_tools.img_match(shot_path, temp_path, roi=roi))
+                pos = get_every_first(cv_tools.img_match(shot_path, temp_path, roi=roi))
                 if not pos:
                     w, h = cv_tools.getWH(shot_path)
                     for sw in swipe:
@@ -209,7 +209,7 @@ def jump_to(targets: list, delay_jump: int=3):
                         pt2 = (int(pt2[0]*w), int(pt2[1]*h))
                         win_tools.adb_swipe(pt1, pt2)
                         time.sleep(2)
-                        pos = get_every(cv_tools.img_match(win_tools.win_shot(), 
+                        pos = get_every_first(cv_tools.img_match(win_tools.win_shot(), 
                                                            temp_path, roi=roi))
                         if pos:
                             break
@@ -218,9 +218,9 @@ def jump_to(targets: list, delay_jump: int=3):
                     print("找不到")
                     return
             else:
-                pos = get_every(cv_tools.img_match(shot_path, temp_path, roi=roi))
+                pos = get_every_first(cv_tools.img_match(shot_path, temp_path, roi=roi))
                 while not pos:
-                    pos = get_every(cv_tools.img_match(win_tools.win_shot(), temp_path, roi=roi))
+                    pos = get_every_first(cv_tools.img_match(win_tools.win_shot(), temp_path, roi=roi))
                     time.sleep(2)
 
             x, y, w, h = pos
@@ -229,61 +229,35 @@ def jump_to(targets: list, delay_jump: int=3):
         elif ope == "ocr":
             # 文本匹配
             ope2, rule = val
-            x1, x2, y1, y2 = tar['x1'], tar['x2'], tar['y1'], tar['y2']
-            if ope2 == "text":
-                if swipe:
-                    pos = get_every(cv_tools.text_match(shot_path, text=rule, 
-                                                        x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                    if not pos:
-                        w, h = cv_tools.getWH(shot_path)
-                        for sw in swipe:
-                            pt1, pt2 = sw
-                            pt1 = (int(pt1[0]*w), int(pt1[1]*h))
-                            pt2 = (int(pt2[0]*w), int(pt2[1]*h))
-                            win_tools.adb_swipe(pt1, pt2)
-                            time.sleep(2)
-                            pos = get_every(cv_tools.text_match(win_tools.win_shot(), text=rule, 
-                                                                x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                            if pos:
-                                break
-                            win_tools.adb_swipe(pt2, pt1)
-                    if not pos:
-                        print("找不到")
-                        return
-                else:
-                    pos = get_every(cv_tools.text_match(shot_path, text=rule, 
-                                                        x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                    while not pos:
-                        pos = get_every(cv_tools.text_match(win_tools.win_shot(), text=rule, 
-                                                            x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
+            x1, x2, y1, y2 = tar['lim']
+            if swipe:
+                pos = get_every_first(cv_tools.text_match(shot_path, text=rule, 
+                                                    x1=x1,x2=x2,y1=y1,y2=y2))
+                if not pos:
+                    w, h = cv_tools.getWH(shot_path)
+                    for sw in swipe:
+                        pt1, pt2 = sw
+                        pt1 = (int(pt1[0]*w), int(pt1[1]*h))
+                        pt2 = (int(pt2[0]*w), int(pt2[1]*h))
+                        win_tools.adb_swipe(pt1, pt2)
                         time.sleep(2)
-            elif ope2 == "rule":
-                if swipe:
-                    pos = get_every(cv_tools.text_match(shot_path, text=rule, 
-                                                        x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                    if not pos:
-                        w, h = cv_tools.getWH(shot_path)
-                        for sw in swipe:
-                            pt1, pt2 = sw
-                            pt1 = (int(pt1[0]*w), int(pt1[1]*h))
-                            pt2 = (int(pt2[0]*w), int(pt2[1]*h))
-                            win_tools.adb_swipe(pt1, pt2)
-                            time.sleep(2)
-                            pos = get_every(cv_tools.text_match(win_tools.win_shot(), text=rule, 
-                                                                x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                            if pos:
-                                break
-                            win_tools.adb_swipe(pt2, pt1)
-                    if not pos:
-                        print("找不到")
-                        return
-                else:
-                    pos = get_every(cv_tools.text_match(shot_path, re_rule=rule, 
-                                                        x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                    while not pos:
-                        pos = get_every(cv_tools.text_match(win_tools.win_shot(), re_rule=rule, 
-                                                            x1=x1,x2=x2,y1=y1,y2=y2)[ope2])
-                        time.sleep(2)
+                        pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
+                                                                  text=rule, 
+                                                                  x1=x1,x2=x2,y1=y1,y2=y2))
+                        if pos:
+                            break
+                        win_tools.adb_swipe(pt2, pt1)
+                if not pos:
+                    print("找不到")
+                    return
+            else:
+                pos = get_every_first(cv_tools.text_match(shot_path, text=rule, 
+                                                    x1=x1,x2=x2,y1=y1,y2=y2))
+                while not pos:
+                    pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
+                                                              text=rule, 
+                                                              x1=x1,x2=x2,y1=y1,y2=y2))
+                    time.sleep(2)
             x, y, w, h = pos[0]
         
         # 点击
@@ -300,9 +274,9 @@ def back_home():
     jump_to(get_json_data(se_json, "backHome"), delay_jump=2)
 
 
-def get_every(result):
+def get_every_first(result):
     """
-    获取每一项
+    获取每个匹配列表的第一项
     :params
         result: 结果
     return

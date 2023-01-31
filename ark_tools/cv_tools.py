@@ -124,7 +124,7 @@ def img_match(
 # 为了方便使用, 可能需要包装一下
 def text_match(
     img_path: str, 
-    text=None, re_rule=None, 
+    text, 
     multiple: bool=False, 
     x1=None,y1=None,x2=None,y2=None
 ):
@@ -132,15 +132,12 @@ def text_match(
     文本匹配, 多目标
     :params
         img_path: 图像路径
-        text: 需要从图像中寻找的文本
-        re_rule: 正则
+        text: 文本或正则(正则以~开头)
         multiple: 是否多目标
         x1, y1, x2, y2: 需要的区域
     :return
-        {
-            "text": [text1:[pos, pos, ...], text2:[pos, pos, ...], ...], 
-            "re_rule": [rule1:[pos, pos, ...], rule2:[pos, pos, ...], ...]
-        }: pos=((x, y, w, h), detect_text)
+        [rule1:[pos, pos, ...], rule2:[pos, pos, ...], ...]
+            : pos=((x, y, w, h), detect_text)
     """
     img_path = img_path.replace('\\', '/')
     # img = cv2.imread(img_path)
@@ -156,11 +153,8 @@ def text_match(
     
     if not isinstance(text, list):
         text = [text]
-    if not isinstance(re_rule, list):
-        re_rule = [re_rule]
     
-    pos_text = [[] for i in range(len(text))]
-    pos_rule = [[] for i in range(len(re_rule))]
+    pos = [[] for i in range(len(text))]
     
     result = ocr.ocr(img_path, cls=True)
     for res in result:
@@ -171,15 +165,13 @@ def text_match(
             w, h = int(line[0][2][0]-x), int(line[0][2][1]-y)
             dec_text, confidence = line[1]
             
-            for tt, rule in zip_longest(enumerate(text), enumerate(re_rule)):
-                if tt:
-                    i, tt = tt
-                    if tt and (tt in dec_text):
-                        pos_text[i].append(((x, y, w, h), dec_text))
-                if rule:
-                    i, rule = rule
-                    if rule and re.findall(rule, dec_text):
-                        pos_rule[i].append(((x, y, w, h), dec_text))
+            for i, t in enumerate(text):
+                if t[0] == '$':
+                    t = t[1:]
+                    if re.findall(t, dec_text):
+                        pos[i].append(((x, y, w, h), dec_text))
+                elif t in dec_text:
+                    pos[i].append(((x, y, w, h), dec_text))
             
             # cv2.polylines(img, [np.array(line[0],np.int32)], True, (0, 0, 255), 3)
             # print(dec_text)
@@ -189,7 +181,7 @@ def text_match(
     # cv2.imshow('img', cv2.resize(img, (int(img.shape[1]/2), int(img.shape[0]/2))))
     # cv2.waitKey(0)
 
-    return {"text": pos_text, "re_rule": pos_rule}
+    return pos
 
 
 def getWH(img_path):
@@ -204,28 +196,14 @@ def getWH(img_path):
     
 
 if __name__ == "__main__":
-    # print("模板匹配:", 
-    #       img_match(os.path.join(dir, 'shot.png'), 
-    #                 os.path.join(dir, 'images/start/logo.jpg'), 
-    #                 ratio=1))
-    # print("文本匹配:", text_match(os.path.join(dir, "images/st.png"), text="开始行动"), 
-    #       "开始行动")
     
-    # remain_san_text, cost_san_text = text_match(os.path.join(dir, "shot.png"), 
-    #                                             re_rule=[r"^\d{1,3}/\d{2,3}$", 
-    #                                                      r"^-\d{1,2}$"], 
-    #                                             x1=10)["re_rule"]
-    # print(remain_san_text, cost_san_text)
-    # remain_san = int(remain_san_text[0][1].split('/')[0])
-    # cost_san = int(cost_san_text[0][1].replace('-', ''))
-    # print(remain_san, cost_san)
-    
-    # print(img_match(os.path.join(dir, "shot.png"), 
-    #                 os.path.join(dir, "images/ZhongDuan/ziYuanShouJi.jpg"), 
-    #                 roi=[["bottom", 0.11], ["top", 0.8]]))
-    # print(img_match(os.path.join(dir, "shot.png"), 
-    #                 os.path.join(dir, "images/ZhongDuan/ziYuanShouJi.jpg"), 
-    #                 roi=(0, 800, 1600, 900)))
-    
-    
-    print(text_match("E:/Chrome/t1.jpg", text="空中威胁"))
+    # print(text_match("E:/Chrome/t1.png", text="开始行动"))
+
+    remain_san_text, cost_san_text = text_match("E:/Chrome/t1.png", 
+                                                text=[r"$^\d{1,3}/\d{2,3}$", 
+                                                         r"$^-\d{1,2}$"], 
+                                                x1=10)
+    print(remain_san_text, cost_san_text)
+    remain_san = int(remain_san_text[0][1].split('/')[0])
+    cost_san = int(cost_san_text[0][1].replace('-', ''))
+    print(remain_san, cost_san)

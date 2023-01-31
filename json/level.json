@@ -1,11 +1,42 @@
 {
+    "template":
+    {
+        "图像":
+        {
+            "ope": "cv", 
+            "val": "path", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        "文本":
+        {
+            "ope": "ocr", 
+            "val": ["text/rule", "文本/正则"], 
+            "lim": [false, false, false, false], 
+            "swipe": false
+        }
+    }, 
+    "沙中之火":
+    [
+        {
+            "ope": "cv", 
+            "val": "images/level/shaZhongZhiHuo/shaZhongZhiHuo.jpg", 
+            "roi": false, 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/level/shaZhongZhiHuo/kaiShiYanSuan.jpg", 
+            "roi": false, 
+            "swipe": false
+        }
+    ], 
     "WB-9":
     [
         {
             "ope": "ocr", 
             "val": ["text", "终端"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }, 
         {
@@ -23,18 +54,17 @@
         {
             "ope": "ocr", 
             "val": ["text", "WB-9"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ], 
+
     "LS-6":
     [
         {
             "ope": "ocr", 
             "val": ["text", "终端"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }, 
         {
@@ -46,8 +76,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "战术演习"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": [
                 [[0.5, 0.5], [0.7, 0.5]], 
                 [[0.5, 0.5], [0.3, 0.5]]
@@ -56,8 +85,37 @@
         {
             "ope": "ocr", 
             "val": ["text", "LS-6"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
+            "swipe": false
+        }
+    ], 
+    "LS-5":
+    [
+        {
+            "ope": "ocr", 
+            "val": ["text", "终端"], 
+            "lim": [false, false, false, false], 
+            "swipe": false
+        }, 
+        {
+            "ope": "cv", 
+            "val": "images/ZhongDuan/ziYuanShouJi.jpg", 
+            "roi": [["bottom", 0.11], ["top", 0.8]], 
+            "swipe": false
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "战术演习"], 
+            "lim": [false, false, false, false], 
+            "swipe": [
+                [[0.5, 0.5], [0.7, 0.5]], 
+                [[0.5, 0.5], [0.3, 0.5]]
+            ]
+        }, 
+        {
+            "ope": "ocr", 
+            "val": ["text", "LS-5"], 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ], 
@@ -66,8 +124,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "终端"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }, 
         {
@@ -79,8 +136,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "固若金汤"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": [
                 [[0.5, 0.5], [0.7, 0.5]], 
                 [[0.5, 0.5], [0.3, 0.5]]
@@ -89,8 +145,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "PR-A-2"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ], 
@@ -99,8 +154,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "终端"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }, 
         {
@@ -112,8 +166,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "固若金汤"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": [
                 [[0.5, 0.5], [0.7, 0.5]], 
                 [[0.5, 0.5], [0.3, 0.5]]
@@ -122,8 +175,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "PR-A-1"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ], 
@@ -132,8 +184,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "终端"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }, 
         {
@@ -145,8 +196,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "摧枯拉朽"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": [
                 [[0.5, 0.5], [0.7, 0.5]], 
                 [[0.5, 0.5], [0.3, 0.5]]
@@ -155,8 +205,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "PR-B-2"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ]
@@ -166,8 +215,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "终端"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }, 
         {
@@ -179,8 +227,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "摧枯拉朽"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": [
                 [[0.5, 0.5], [0.7, 0.5]], 
                 [[0.5, 0.5], [0.3, 0.5]]
@@ -189,8 +236,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "PR-B-1"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ]
