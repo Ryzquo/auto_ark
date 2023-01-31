@@ -16,8 +16,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "开始唤醒"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ], 
@@ -47,8 +46,7 @@
         {
             "ope": "ocr", 
             "val": ["text", "首页"], 
-            "x1": false, "y1": false, 
-            "x2": false, "y2": false, 
+            "lim": [false, false, false, false], 
             "swipe": false
         }
     ]

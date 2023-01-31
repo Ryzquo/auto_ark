@@ -47,14 +47,13 @@ def start_ark(path_emulator: str):
     
     # 连接abd
     if not win_tools.connect_adb():
-        print("adb连接失败...")
         return
-    print("adb连接成功...")
     
     if get_every_first(cv_tools.text_match(win_tools.win_shot(), text="明日方舟")):
         startup()
         
-    clear_san(cur_level)
+    # clear_san(cur_level)
+    receive_award()
     
     # # 进入代理循环
     # while hwnd:
@@ -77,13 +76,8 @@ def stop_ark():
     结束
     """
     if win_tools.disconnect_adb():
-        print(
-            "adb连接已断开...\n"
-            "结束..."
-        )
+        print("结束...")
         return
-
-    print("断开adb连接失败...")
     
     
 def startup(start_time: int=15):
@@ -122,7 +116,9 @@ def clear_san(level: str):
     # 从json中获取关卡对应图像所在地址
     # 进入关卡开始页
     print("正在进入关卡页...")
-    jump_to(get_json_data(level_json, level))
+    if not jump_to(get_json_data(level_json, level)):
+        print("进入关卡页失败...")
+        return
     
     # 开始->进入循环, 理智不够停止
     # 检测花费理智与剩余理智
@@ -178,14 +174,55 @@ def clear_san(level: str):
         
     print("理智已清完...")
     
+    
+def receive_award(
+    level: str=None
+):
+    """
+    领取奖励
+    """
+    # 回到主页
+    if not get_every_first(cv_tools.text_match(win_tools.win_shot(), text="基建")):
+        print("返回主页...")
+        back_home()
+    
+    print("领取日常/周常奖励...")
+    if not level:
+        for i in ["任务", "周常任务"]:
+            pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), text=i))
+            if pos:
+                x, y, w, h = pos[0]
+                win_tools.adb_click(int(x+w/2), int(y+h/2))
+            pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), text="收集全部"))
+            if pos:
+                x, y, w, h = pos[0]
+                for j in range(2):
+                    win_tools.adb_click(int(x+w/2), int(y+h/2))
+                    time.sleep(2)
+            else:
+                print(f"无可领取{i}奖励...")
         
-def jump_to(targets: list, delay_jump: int=3):
+    else:
+        if not jump_to(get_json_data(se_json, level)):
+            print("无可领取奖励...")
+            return
+    
+    back_home()
+    
+        
+def jump_to(
+    targets: list, 
+    delay_jump: int=3, 
+    detect_times: int=3
+):
     """
     根据传入的路径跳转到对应界面
     :params
         targets: 路径列表
         delay_jump: 界面间的切换时间
+        detect_times: 未检测到时的重试次数
     :return
+        是否跳转成功
     """
     for tar in targets:
         # 截图路径
@@ -214,15 +251,17 @@ def jump_to(targets: list, delay_jump: int=3):
                         if pos:
                             break
                         win_tools.adb_swipe(pt2, pt1)
-                if not pos:
-                    print("找不到")
-                    return
             else:
                 pos = get_every_first(cv_tools.img_match(shot_path, temp_path, roi=roi))
-                while not pos:
-                    pos = get_every_first(cv_tools.img_match(win_tools.win_shot(), temp_path, roi=roi))
+                for i in range(detect_times):
+                    pos = get_every_first(cv_tools.img_match(win_tools.win_shot(), 
+                                                             temp_path, roi=roi))
                     time.sleep(2)
-
+                    if pos:
+                        break
+            if not pos:
+                print("找不到")
+                return False
             x, y, w, h = pos
             
             
@@ -247,17 +286,19 @@ def jump_to(targets: list, delay_jump: int=3):
                         if pos:
                             break
                         win_tools.adb_swipe(pt2, pt1)
-                if not pos:
-                    print("找不到")
-                    return
             else:
                 pos = get_every_first(cv_tools.text_match(shot_path, text=rule, 
                                                     x1=x1,x2=x2,y1=y1,y2=y2))
-                while not pos:
+                for i in range(detect_times):
                     pos = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
                                                               text=rule, 
                                                               x1=x1,x2=x2,y1=y1,y2=y2))
                     time.sleep(2)
+                    if pos:
+                        break
+            if not pos:
+                print("找不到")
+                return False
             x, y, w, h = pos[0]
         
         # 点击
@@ -265,7 +306,8 @@ def jump_to(targets: list, delay_jump: int=3):
         
         # 跳转到对应界面的时间
         time.sleep(delay_jump)
-        
+    
+    return True
 
 def back_home():
     """
@@ -305,6 +347,6 @@ def get_json_data(path: str, id: str):
 if __name__ == "__main__":
     win_tools.connect_adb()
     
-    clear_san("LS-6")
+    receive_award()
     
     win_tools.disconnect_adb()

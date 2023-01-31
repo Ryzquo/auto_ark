@@ -28,17 +28,15 @@ def connect_adb(connect_times: int=5):
     :return
         是否连接成功: bool
     """
-    connect_status = adb_connect_status()
-    if connect_status:
-        return connect_status
-    
     print("连接adb中...")
+    connect_status = False
     for i in range(connect_times):
-        print(f"第{i+1}次.")
         subprocess.call(f"{adb} connect {adb_address}")
         connect_status = adb_connect_status()
         if connect_status:
             break 
+    
+    print("连接成功..." if connect_status else "连接失败...")
     
     return connect_status
 
@@ -51,15 +49,15 @@ def disconnect_adb(disconnect_times: int=5):
     :return
         是否连接成功: bool
     """
-    connect_status = not adb_connect_status()
-    if connect_status:
-        return connect_status
-    
+    print("断开adb连接中...")
+    connect_status = False
     for i in range(disconnect_times):
         subprocess.call(f"{adb} disconnect {adb_address}")
         connect_status = not adb_connect_status()
         if connect_status:
-            break 
+            break
+    
+    print("断开连接成功..." if connect_status else "断开连接失败...")
     
     return connect_status
 

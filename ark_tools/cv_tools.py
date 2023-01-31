@@ -199,11 +199,13 @@ if __name__ == "__main__":
     
     # print(text_match("E:/Chrome/t1.png", text="开始行动"))
 
-    remain_san_text, cost_san_text = text_match("E:/Chrome/t1.png", 
-                                                text=[r"$^\d{1,3}/\d{2,3}$", 
-                                                         r"$^-\d{1,2}$"], 
-                                                x1=10)
-    print(remain_san_text, cost_san_text)
-    remain_san = int(remain_san_text[0][1].split('/')[0])
-    cost_san = int(cost_san_text[0][1].replace('-', ''))
-    print(remain_san, cost_san)
+    # remain_san_text, cost_san_text = text_match("E:/Chrome/t1.png", 
+    #                                             text=[r"$^\d{1,3}/\d{2,3}$", 
+    #                                                      r"$^-\d{1,2}$"], 
+    #                                             x1=10)
+    # print(remain_san_text, cost_san_text)
+    # remain_san = int(remain_san_text[0][1].split('/')[0])
+    # cost_san = int(cost_san_text[0][1].replace('-', ''))
+    # print(remain_san, cost_san)
+    
+    print(text_match("E:/Chrome/t1.png", text="周常任务"))
