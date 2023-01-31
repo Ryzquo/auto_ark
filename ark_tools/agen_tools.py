@@ -164,11 +164,11 @@ def clear_san(level: str):
         time.sleep(3)
         # 检测剩余理智, 准备进入下一轮循环
         remain_san_text = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
-                                              re_rule=r"^\d{1,3}/\d{2,3}$", 
+                                              text=r"^\d{1,3}/\d{2,3}$", 
                                               x1=20))
         while not remain_san_text:
             remain_san_text = get_every_first(cv_tools.text_match(win_tools.win_shot(), 
-                                                  re_rule=r"^\d{1,3}/\d{2,3}$", 
+                                                  text=r"^\d{1,3}/\d{2,3}$", 
                                                   x1=20))
         remain_san = int(remain_san_text[1].split('/')[0])
         
