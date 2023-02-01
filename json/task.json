@@ -1,0 +1,22 @@
+{
+    "START_EMULATOR":
+    {
+        "name": "启动模拟器", 
+        "checked": false
+    }, 
+    "START_GAME": 
+    {
+        "name": "启动游戏", 
+        "checked": false
+    }, 
+    "CLEAR_SAN": 
+    {
+        "name": "清理智", 
+        "checked": false
+    }, 
+    "RECEIVE_AWARD": 
+    {
+        "name": "领取日常/周常奖励", 
+        "checked": false
+    }
+}
