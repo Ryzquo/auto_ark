@@ -5,7 +5,9 @@ import os
 import time
 import subprocess
 import win32gui, win32api
+import pythoncom
 
+import win32com.client
 
 window_names = [
     "BlueStacks App Player", 
@@ -152,9 +154,10 @@ def get_realpath(path:str):
     
     if path.endswith('.lnk'):
         # 快捷方式
-        import win32com.client
+        pythoncom.CoInitialize()
         shell = win32com.client.Dispatch("WScript.Shell")
         realpath = shell.CreateShortCut(path).Targetpath
+        pythoncom.CoInitialize()
         
     else:
         realpath = path

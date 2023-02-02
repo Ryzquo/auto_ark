@@ -50,7 +50,7 @@ class AgenTools():
             path_emulator = win_tools.get_realpath(path_emulator)
             # 启动
             hwnd = win_tools.start_getHwnd(path_emulator, 
-                                           delay_start=self.startEmulator_time)
+                                           delay_start=self.taskFlags['startEmulator_time'])
         else:
             # 获取窗口句柄
             hwnd = win_tools.find_window() 
@@ -92,7 +92,7 @@ class AgenTools():
         """
         print("启动游戏中...")
         targets = AgenTools.get_json_data(self.se_json, "startup")
-        self.jump_to(targets)
+        self.jump_to(targets, delay_jump=3, detect_times=20)
         time.sleep(start_time)
         
         # 关闭公告
@@ -325,8 +325,8 @@ class AgenTools():
         """
         返回主页
         """
-        AgenTools.jump_to(AgenTools.get_json_data(self.se_json, "backHome"), 
-                          delay_jump=2)
+        self.jump_to(AgenTools.get_json_data(self.se_json, "backHome"), 
+                     delay_jump=2)
 
 
     @staticmethod

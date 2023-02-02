@@ -1,5 +1,5 @@
 #!/user/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import os
 import sys
@@ -9,131 +9,149 @@ import threading
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ark_tools/').replace('\\', '/'))
 from ark_tools.agen_tools import AgenTools
 
-from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+from PySide6.QtWidgets import *
 
-class MainWindow(QWidget):
+sys.path.append(os.path.join(os.path.dirname(__file__), 'ui_tools/').replace('\\', '/'))
+from ui_tools.InterfaceUI import Ui_InterfaceUI
+
+
+class MainWindow(QMainWindow):
     def __init__(self):
-        super().__init__()
+        super(MainWindow, self).__init__()
+        self.ui = Ui_InterfaceUI()
+        self.ui.setupUi(self)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         
+        # 工作目录
         self.dir = os.path.dirname(os.path.realpath(__file__)).replace('\\', '/')
-        
-        # 图标
-        self.logoPath = os.path.join(self.dir, 'images/logo.jpg')
         # 模拟器路径
         self.path_emulator = "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/BlueStacks 5.lnk"
         # 任务json
         self.task_json = os.path.join(self.dir, "json/task.json").replace('\\', '/')
+        self.tasks = AgenTools.get_json_data(self.task_json)
         
-        # 屏幕大小
-        self.screenWidth, self.screenHeight = self.getScreenSize()
-        
-        # 初始化
-        self.initStyle()
         self.agenTools = AgenTools()
-        self.initControl()
-        
-    def __del__(self):
-        self.agenTools.stop_ark()
-        
-    def initStyle(self):
-        """
-        初始化窗口样式
-        """
-        self.setWindowTitle("auto_ark")
-        self.setWindowIcon(QIcon(self.logoPath))
-        self.resize(QSize(int(self.screenWidth/2), int(self.screenHeight/2)))
-        
-    def initControl(self):
-        """
-        初始化窗口控件
-        """
-        # 任务列表
-        self.listTask = QListWidget(self)
-        self.listTask.setStyleSheet(
-            "border: none;"
-        )
-        # 开始按钮
-        self.btnStart = QPushButton(self, text="开始")
-        # 设置
-        self.widgetSetting = QWidget(self)
-        self.widgetSetting.setStyleSheet(
-            "background-color: white;"
-        )
-        # 日志列表
-        self.treeLog = QTextEdit(self)
-        self.treeLog.setStyleSheet(
-            "border: none;"
-        )
-        
-        # 布局
-        grid = QGridLayout()
-        grid.setSpacing(10)
-        # 左
-        grid.addWidget(self.listTask, 1, 0, 3, 3)
-        grid.addWidget(self.btnStart, 4, 1, 1, 1)
-        # 中
-        grid.addWidget(self.widgetSetting, 1, 3, 4, 3)
-        # 右
-        grid.addWidget(self.treeLog, 1, 6, 4, 3)
-        
-        self.setLayout(grid)
-        
-        # 初始化任务列表
-        self.initListTask()
-        # 槽
+        self.initTaskList()
         self.ctConnect()
         
+        # 脚本是否执行
+        self.isRun = False
+        # 脚本线程
+        self.agenThread = threading.Thread(target=self.agenTools.start_ark,
+                                           kwargs={"path_emulator": self.path_emulator})
+        
+    def __del__(self):
+        self.sav_json()
+            
+    def sav_json(self):
+        with open(self.task_json, 'w') as jf:
+            json.dump(self.tasks, jf)
+    
     def ctConnect(self):
         """
         连接信号槽
         """
-        self.btnStart.clicked.connect(
-            lambda: threading.Thread(target=self.agenTools.start_ark, 
-                                     kwargs={"path_emulator": self.path_emulator}).start()
+        self.ui.pBtnSE.clicked.connect(self.onPBtnSE_clicked)
+        
+    def initTaskList(self):
+        """
+        初始化任务列表
+        """
+        # 启动模拟器
+        self.agenTools.taskFlags[self.tasks[u'启动模拟器']['key']] = self.tasks['启动模拟器']['checked']
+        self.checkBoxStartEm = QCheckBox(text=u"启动模拟器")
+        self.checkBoxStartEm.setStyleSheet(
+            "color: rgb(255, 255, 255);"
         )
-        
-    def initListTask(self):
-        """
-        从json初始化任务列表
-        """
-        self.listTask.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
-        tasks = AgenTools.get_json_data(self.task_json)
-        for key in tasks.keys():
-            itemTask = QListWidgetItem()
-            itemCheckBox = QCheckBox(text=tasks[key]['name'])
-            itemCheckBox.stateChanged.connect(self.onCheckBoxChange())
-            self.listTask.addItem(itemTask)
-            self.listTask.setItemWidget(itemTask, itemCheckBox)
-        
-    def getScreenSize(self):
-        """
-        获取屏幕大小
-        :params
-        :return
-            (width, height)
-        """
-        screen = QGuiApplication.primaryScreen().geometry()
-        return (screen.width(), screen.height())
+        self.checkBoxStartEm.setCheckState(Qt.CheckState.Checked 
+                                    if self.tasks[u'启动模拟器']['checked'] 
+                                    else Qt.CheckState.Unchecked)
+        self.checkBoxStartEm.stateChanged.connect(self.onStartEmStateChanged)
+        itemStartEm = QListWidgetItem()
+        self.ui.listWTask.addItem(itemStartEm)
+        self.ui.listWTask.setItemWidget(itemStartEm, self.checkBoxStartEm)
+        # 启动游戏
+        self.agenTools.taskFlags[self.tasks[u'启动游戏']['key']] = self.tasks['启动游戏']['checked']
+        self.checkBoxStartGame = QCheckBox(text=u"启动游戏")
+        self.checkBoxStartGame.setStyleSheet(
+            "color: rgb(255, 255, 255);"
+        )
+        self.checkBoxStartGame.setCheckState(Qt.CheckState.Checked
+                                    if self.tasks[u'启动游戏']['checked'] 
+                                    else Qt.CheckState.Unchecked)
+        self.checkBoxStartGame.stateChanged.connect(self.onStartGameStateChanged)
+        itemStartGame = QListWidgetItem()
+        self.ui.listWTask.addItem(itemStartGame)
+        self.ui.listWTask.setItemWidget(itemStartGame, self.checkBoxStartGame)
+        # 清理智
+        self.agenTools.taskFlags[self.tasks[u'清理智']['key']] = self.tasks['清理智']['checked']
+        self.checkBoxClearSan = QCheckBox(text=u"清理智")
+        self.checkBoxClearSan.setStyleSheet(
+            "color: rgb(255, 255, 255);"
+        )
+        self.checkBoxClearSan.setCheckState(Qt.CheckState.Checked
+                                    if self.tasks[u'清理智']['checked'] 
+                                    else Qt.CheckState.Unchecked)
+        self.checkBoxClearSan.stateChanged.connect(self.onClearSanStateChanged)
+        itemClearSan = QListWidgetItem()
+        self.ui.listWTask.addItem(itemClearSan)
+        self.ui.listWTask.setItemWidget(itemClearSan, self.checkBoxClearSan)
+        # 领取奖励
+        self.agenTools.taskFlags[self.tasks[u'领取奖励']['key']] = self.tasks['领取奖励']['checked']
+        self.checkBoxRA = QCheckBox(text=u"领取奖励")
+        self.checkBoxRA.setStyleSheet(
+            "color: rgb(255, 255, 255);"
+        )
+        self.checkBoxRA.setCheckState(Qt.CheckState.Checked
+                                    if self.tasks[u'领取奖励']['checked'] 
+                                    else Qt.CheckState.Unchecked)
+        self.checkBoxRA.stateChanged.connect(self.onRAStateChanged)
+        itemRA = QListWidgetItem()
+        self.ui.listWTask.addItem(itemRA)
+        self.ui.listWTask.setItemWidget(itemRA, self.checkBoxRA)
     
-    def onCheckBoxChange(self):
-        """
-        复选框状态改变
-        更改代理任务
-        更改task.json对应项
-        """
-        with open(self.task_json, 'r', encoding='utf-8') as jf:
-            tasks = json.load(jf)
-        for i in range(len(tasks)):
-            # item = QCheckBox(self.listTask.itemWidget(self.listTask.item(i)))
-            ...
-        
+    # 槽    
+    def onPBtnSE_clicked(self):
+        if not self.isRun:
+            self.agenThread.start()
+            self.isRun = True
+            self.ui.pBtnSE.setText(u"停止")
+            self.ui.stackedWidget.setCurrentIndex(1)
+        else:
+            self.agenThread._stop()
+            self.isRun = False
+            self.ui.pBtnSE.setText(u"开始")
+            if self.ui.stackedWidget.currentIndex() == 1:
+                self.ui.stackedWidget.setCurrentIndex(0)
+    
+    def onStartEmStateChanged(self):
+        self.agenTools.taskFlags[self.tasks[u'启动模拟器']['key']] = self.checkBoxStartEm.isChecked()
+        self.tasks[u'启动模拟器']['checked'] = self.checkBoxStartEm.isChecked()
+        self.sav_json()
+    
+    def onStartGameStateChanged(self):
+        self.agenTools.taskFlags[self.tasks[u'启动游戏']['key']] = self.checkBoxStartGame.isChecked()
+        self.tasks[u'启动游戏']['checked'] = self.checkBoxStartGame.isChecked()
+        self.sav_json()
+    
+    def onClearSanStateChanged(self):
+        self.agenTools.taskFlags[self.tasks[u'清理智']['key']] = self.checkBoxClearSan.isChecked()
+        self.tasks[u'清理智']['checked'] = self.checkBoxClearSan.isChecked()
+        self.sav_json()
+    
+    def onRAStateChanged(self):
+        self.agenTools.taskFlags[self.tasks[u'领取奖励']['key']] = self.checkBoxRA.isChecked()
+        self.tasks[u'领取奖励']['checked'] = self.checkBoxRA.isChecked()
+        self.sav_json()
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     mainWindow = MainWindow()
     mainWindow.show()
-    
+
     sys.exit(app.exec())
