@@ -33,6 +33,9 @@ class MainWindow(QMainWindow):
         self.task_json = os.path.join(self.dir, "json/task.json").replace('\\', '/')
         self.tasks = AgenTools.get_json_data(self.task_json)
         
+        # 图标
+        self.setWindowIcon(QIcon(os.path.join(self.dir, 'images/ui/logo.png')))
+        
         self.agenTools = AgenTools()
         self.initTaskList()
         self.ctConnect()
@@ -42,9 +45,11 @@ class MainWindow(QMainWindow):
         # 脚本线程
         self.agenThread = threading.Thread(target=self.agenTools.start_ark,
                                            kwargs={"path_emulator": self.path_emulator})
+        self.agenThread.setDaemon(True)
         
     def __del__(self):
         self.sav_json()
+        self.agenThread.join()
             
     def sav_json(self):
         with open(self.task_json, 'w') as jf:
@@ -55,6 +60,7 @@ class MainWindow(QMainWindow):
         连接信号槽
         """
         self.ui.pBtnSE.clicked.connect(self.onPBtnSE_clicked)
+        self.ui.pBtnMaximize.clicked.connect(self.restore_or_maximize_window)
         
     def initTaskList(self):
         """
@@ -121,7 +127,10 @@ class MainWindow(QMainWindow):
             self.ui.pBtnSE.setText(u"停止")
             self.ui.stackedWidget.setCurrentIndex(1)
         else:
-            self.agenThread._stop()
+            # 终止脚本线程
+            # self.agenThread.join()
+            # 尝试
+            # 在一个隐藏的窗口的执行该守护线程, 停止即关闭窗口
             self.isRun = False
             self.ui.pBtnSE.setText(u"开始")
             if self.ui.stackedWidget.currentIndex() == 1:
@@ -146,6 +155,28 @@ class MainWindow(QMainWindow):
         self.agenTools.taskFlags[self.tasks[u'领取奖励']['key']] = self.checkBoxRA.isChecked()
         self.tasks[u'领取奖励']['checked'] = self.checkBoxRA.isChecked()
         self.sav_json()
+        
+    def restore_or_maximize_window(self):
+        if self.isMaximized():
+            self.showNormal()
+        else:
+            self.showMaximized()
+    
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton and self.isMaximized() == False:
+            self.m_flag = True
+            self.m_Position = event.globalPos() - self.pos()  # 获取鼠标相对窗口的位置
+            event.accept()
+            self.setCursor(QCursor(Qt.CursorShape.OpenHandCursor))  # 更改鼠标图标
+
+    def mouseMoveEvent(self, mouse_event):
+        if Qt.MouseButton.LeftButton and self.m_flag:
+            self.move(mouse_event.globalPos() - self.m_Position)  # 更改窗口位置
+            mouse_event.accept()
+
+    def mouseReleaseEvent(self, mouse_event):
+        self.m_flag = False
+        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
 
 if __name__ == '__main__':

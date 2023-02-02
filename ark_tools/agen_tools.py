@@ -34,6 +34,9 @@ class AgenTools():
             # 领取日常/周常奖励
             "RECEIVE_AWARD": False
         }
+        
+    def __del__(self):
+        super().__del__()
 
     def start_ark(self, path_emulator: str):
         """
