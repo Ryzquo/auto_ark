@@ -29,7 +29,9 @@ class Ui_InterfaceUI(object):
         self.centralwidget = QWidget(InterfaceUI)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
         self.frame.setStyleSheet(u"#frame{\n"
@@ -334,12 +336,6 @@ class Ui_InterfaceUI(object):
         __qtreewidgetitem.setTextAlignment(0, Qt.AlignCenter);
         __qtreewidgetitem.setFont(0, font);
         self.treeLog.setHeaderItem(__qtreewidgetitem)
-        __qtreewidgetitem1 = QTreeWidgetItem(self.treeLog)
-        QTreeWidgetItem(__qtreewidgetitem1)
-        QTreeWidgetItem(__qtreewidgetitem1)
-        QTreeWidgetItem(__qtreewidgetitem1)
-        __qtreewidgetitem2 = QTreeWidgetItem(self.treeLog)
-        QTreeWidgetItem(__qtreewidgetitem2)
         self.treeLog.setObjectName(u"treeLog")
         font1 = QFont()
         font1.setFamilies([u"\u9ed1\u4f53"])
@@ -388,22 +384,5 @@ class Ui_InterfaceUI(object):
         self.pBtnSE.setText(QCoreApplication.translate("InterfaceUI", u"\u5f00\u59cb", None))
         ___qtreewidgetitem = self.treeLog.headerItem()
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65e5\u5fd7", None));
-
-        __sortingEnabled = self.treeLog.isSortingEnabled()
-        self.treeLog.setSortingEnabled(False)
-        ___qtreewidgetitem1 = self.treeLog.topLevelItem(0)
-        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65b0\u5efa\u9879\u76ee", None));
-        ___qtreewidgetitem2 = ___qtreewidgetitem1.child(0)
-        ___qtreewidgetitem2.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65b0\u5efa\u9879\u76ee", None));
-        ___qtreewidgetitem3 = ___qtreewidgetitem1.child(1)
-        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65b0\u5efa\u9879\u76ee", None));
-        ___qtreewidgetitem4 = ___qtreewidgetitem1.child(2)
-        ___qtreewidgetitem4.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65b0\u5efa\u5b50\u9879\u76ee", None));
-        ___qtreewidgetitem5 = self.treeLog.topLevelItem(1)
-        ___qtreewidgetitem5.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65b0\u5efa\u9879\u76ee", None));
-        ___qtreewidgetitem6 = ___qtreewidgetitem5.child(0)
-        ___qtreewidgetitem6.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65b0\u5efa\u5b50\u9879\u76ee", None));
-        self.treeLog.setSortingEnabled(__sortingEnabled)
-
     # retranslateUi
 

@@ -2,6 +2,8 @@
 
 明日方舟挂机脚本
 
+<img src="./images/s.png" style="zoom:50%;" />
+
 #### 待完善
 
 - [x] 清理智

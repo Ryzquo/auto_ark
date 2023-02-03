@@ -15,6 +15,21 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QFrame" name="frame">
       <property name="styleSheet">
@@ -631,36 +646,6 @@ QHeaderView::section{
                         <set>AlignCenter</set>
                        </property>
                       </column>
-                      <item>
-                       <property name="text">
-                        <string>新建项目</string>
-                       </property>
-                       <item>
-                        <property name="text">
-                         <string>新建项目</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>新建项目</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string>新建子项目</string>
-                        </property>
-                       </item>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>新建项目</string>
-                       </property>
-                       <item>
-                        <property name="text">
-                         <string>新建子项目</string>
-                        </property>
-                       </item>
-                      </item>
                      </widget>
                     </item>
                    </layout>

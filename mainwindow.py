@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self.agenThread.setDaemon(True)
         
     def __del__(self):
+        self.agenTools.stop_ark()
         self.sav_json()
         self.agenThread.join()
             
@@ -131,6 +132,9 @@ class MainWindow(QMainWindow):
             # self.agenThread.join()
             # 尝试
             # 在一个隐藏的窗口的执行该守护线程, 停止即关闭窗口
+            self.agenThread = threading.Thread(target=self.agenTools.start_ark,
+                                               kwargs={"path_emulator": self.path_emulator})
+            self.agenThread.setDaemon(True)
             self.isRun = False
             self.ui.pBtnSE.setText(u"开始")
             if self.ui.stackedWidget.currentIndex() == 1:
@@ -161,22 +165,37 @@ class MainWindow(QMainWindow):
             self.showNormal()
         else:
             self.showMaximized()
+            
+    def mouseDoubleClickEvent(self, event):
+        if (
+            Qt.MouseButton.LeftButton 
+            and event.pos().y() < self.ui.titleBar.height()
+        ):
+            self.restore_or_maximize_window()
+        return super().mouseDoubleClickEvent(event)
     
     def mousePressEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton and self.isMaximized() == False:
+        if (
+            event.button() == Qt.MouseButton.LeftButton 
+            and event.pos().y() < self.ui.titleBar.height()
+            and self.isMaximized() == False
+        ):
             self.m_flag = True
             self.m_Position = event.globalPos() - self.pos()  # 获取鼠标相对窗口的位置
             event.accept()
             self.setCursor(QCursor(Qt.CursorShape.OpenHandCursor))  # 更改鼠标图标
+        return super().mousePressEvent(event)
 
-    def mouseMoveEvent(self, mouse_event):
+    def mouseMoveEvent(self, event):
         if Qt.MouseButton.LeftButton and self.m_flag:
-            self.move(mouse_event.globalPos() - self.m_Position)  # 更改窗口位置
-            mouse_event.accept()
+            self.move(event.globalPos() - self.m_Position)  # 更改窗口位置
+            event.accept()
+        return super().mouseMoveEvent(event)
 
-    def mouseReleaseEvent(self, mouse_event):
+    def mouseReleaseEvent(self, event):
         self.m_flag = False
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+        return super().mouseReleaseEvent(event)
 
 
 if __name__ == '__main__':
