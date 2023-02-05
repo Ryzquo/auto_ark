@@ -14,14 +14,15 @@ class CvTools():
     def __init__(self) -> None:
         # 当前文件所在目录
         self.dir = os.path.dirname(os.path.dirname(__file__)).replace('\\', '/')
-        # 文本识别
-        self.ocr = PaddleOCR(use_angle_cls=True, lang="ch")
+        # 文本识别初始化标志
+        self.init_ocr_flag = False
+        # 原图像大小(w, h)
+        self.size_ori = (1492, 839)
 
     def img_match(
         self, 
         target_path: str, template_path=None, 
-        ratio: float=1, thresh: float=0.4, 
-        multiple: bool=False, 
+        thresh: float=0.4, multiple: bool=False, 
         roi=None
     ):
         """
@@ -32,17 +33,24 @@ class CvTools():
             ratio: 比例
             thresh: 阈值
             multiple: 是否多目标
-            roi: 感兴趣区域 -> 主对角线(x1,y1, x2,y2):int // [("left/right/top/bottom",  (0-1] ), ...]
+            roi: 感兴趣区域 -> 主对角线(x1,y1, x2,y2):int // 
+                [("left/right/top/bottom",  (0-1] ), ...]
         :return
             [temp1:[pos, pos, ...], temp2:[pos, pos, ...]]
                 : pos=(x, y, w, h)
         """
         target_path = target_path.replace('\\', '/')
+        if not os.path.exists(target_path):
+            print(f"{target_path}不存在")
+            return
         target = cv2.imread(target_path)
         h_target, w_target = target.shape[:2]
+        w_ratio = w_target/self.size_ori[0]
+        h_ratio = h_target/self.size_ori[1]
         
         # draw = target.copy()
         
+        # 计算检测区域
         x_ori, y_ori = 0, 0
         if roi:
             if not isinstance(roi, list):
@@ -81,7 +89,8 @@ class CvTools():
             
             template = cv2.imread(temp_path)
             template = cv2.resize(template, 
-                                (int(template.shape[1]*ratio), int(template.shape[0]*ratio)))
+                                (int(template.shape[1]*w_ratio), 
+                                 int(template.shape[0]*h_ratio)))
             h, w, _ = template.shape
         
             # 模板匹配
@@ -139,20 +148,26 @@ class CvTools():
                 : pos=((x, y, w, h), detect_text)
         """
         img_path = img_path.replace('\\', '/')
-        # img = cv2.imread(img_path)
         if not os.path.exists(img_path):
             print("图片不存在")
             return
+        
+        # img = cv2.imread(img_path)
 
+        # 计算检测区域
         h, w = cv2.imread(img_path).shape[:2]
         x1 = (x1*w if (0<x1<1) else x1) if x1 else 0
         y1 = (y1*h if (0<y1<1) else y1) if y1 else 0
         x2 = (x2*w if (0<x2<1) else x2) if x2 else w
         y2 = (y2*h if (0<y2<1) else y2) if y2 else h
         
+        if not self.init_ocr_flag:
+            # 文本识别
+            self.ocr = PaddleOCR(use_angle_cls=True, lang="ch")
+            self.init_ocr_flag = True
+        
         if not isinstance(text, list):
             text = [text]
-        
         pos = [[] for i in range(len(text))]
         
         result = self.ocr.ocr(img_path, cls=True)
@@ -165,7 +180,7 @@ class CvTools():
                 dec_text, confidence = line[1]
                 
                 for i, t in enumerate(text):
-                    if t[0] == '$':
+                    if t and t[0] == '$':
                         t = t[1:]
                         if re.findall(t, dec_text):
                             pos[i].append(((x, y, w, h), dec_text))

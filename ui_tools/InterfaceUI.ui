@@ -387,25 +387,36 @@ QPushButton:hover{
             </property>
             <property name="styleSheet">
              <string notr="true">#listWTask{
-	color: rgb(255, 255, 255);
+	font: 12pt &quot;黑体&quot;;
+	color: rgba(255, 255, 255, .8);
 	background-color: rgba(66, 66, 78, 1);
-	border: 5px solid rgba(66, 66, 78, 1);
+	border: 8px solid rgba(66, 66, 78, 1);
 	border-radius: 10px;
+	outline: 0px;
 }
 #listWTask::item {
+	height: 40px;
 }
 #listWTask::item:hover {
+	padding: 6px;
+	background-color: transparent;
+	border-left: 3px solid rgba(130, 130, 130, 1);
 }
 #listWTask::item:selected {
+	padding: 8px;
+	color: rgba(255, 255, 255, 1);
+	background-color: transparent;
+	border-left: 3px solid rgba(255, 255, 255, 1);
 }
 
-#pBtnSE{
-	color: rgb(255, 255, 255);
+#pBtnSE, #pBtnLog{
+	width: 50px;
 	font: 12pt &quot;黑体&quot;;
+	color: rgb(255, 255, 255);
 	background-color: rgba(86, 88, 93, 1);
-	border-radius: 10px;
+	border-radius: 8px;
 }
-#pBtnSE:hover{
+#pBtnSE:hover, #pBtnLog:hover{
 	background-color: rgba(86, 88, 93, .5);
 }</string>
             </property>
@@ -475,13 +486,13 @@ QPushButton:hover{
                   </property>
                   <layout class="QHBoxLayout" name="hLayoutPBtn">
                    <item>
-                    <spacer name="horizontalSpacer_3">
+                    <spacer name="hs1">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
                      <property name="sizeHint" stdset="0">
                       <size>
-                       <width>48</width>
+                       <width>30</width>
                        <height>20</height>
                       </size>
                      </property>
@@ -495,6 +506,12 @@ QPushButton:hover{
                        <verstretch>1</verstretch>
                       </sizepolicy>
                      </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true"/>
                      </property>
@@ -504,13 +521,48 @@ QPushButton:hover{
                     </widget>
                    </item>
                    <item>
-                    <spacer name="horizontalSpacer_2">
+                    <spacer name="hs2">
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
                      <property name="sizeHint" stdset="0">
                       <size>
-                       <width>48</width>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="pBtnLog">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>1</horstretch>
+                       <verstretch>1</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>黑体</family>
+                       <pointsize>12</pointsize>
+                       <italic>false</italic>
+                       <bold>false</bold>
+                       <kerning>true</kerning>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>日志</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="hs3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>30</width>
                        <height>20</height>
                       </size>
                      </property>

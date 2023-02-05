@@ -22,11 +22,14 @@ class AgenTools():
         # json
         self.level_json = os.path.join(self.dir, "json/level.json").replace('\\', '/')
         self.se_json = os.path.join(self.dir, "json/se.json").replace('\\', '/')
+        # 启动模拟器时间
+        self.startEmulator_time = 20
+        # 结束
+        self.isEnd = False
         
         self.taskFlags = {
             # 启动模拟器
             "START_EMULATOR": False, 
-            "startEmulator_time": 20,
             # 启动游戏 
             "START_GAME": False, 
             # 清理智
@@ -36,7 +39,7 @@ class AgenTools():
         }
         
     def __del__(self):
-        super().__del__()
+        self.stop_ark()
 
     def start_ark(self, path_emulator: str):
         """
@@ -53,7 +56,7 @@ class AgenTools():
             path_emulator = win_tools.get_realpath(path_emulator)
             # 启动
             hwnd = win_tools.start_getHwnd(path_emulator, 
-                                           delay_start=self.taskFlags['startEmulator_time'])
+                                           delay_start=self.startEmulator_time)
         else:
             # 获取窗口句柄
             hwnd = win_tools.find_window() 
@@ -78,6 +81,8 @@ class AgenTools():
         # 领取奖励
         if self.taskFlags['RECEIVE_AWARD']:
             self.receive_award()
+            
+        self.isEnd = True
         
         
     def stop_ark(self):
@@ -87,7 +92,7 @@ class AgenTools():
         if win_tools.disconnect_adb():
             print("结束...")
             return
-        
+    
         
     def startup(self, start_time: int=15):
         """

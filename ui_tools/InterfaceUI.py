@@ -201,25 +201,36 @@ class Ui_InterfaceUI(object):
         sizePolicy5.setHeightForWidth(self.widgetTask.sizePolicy().hasHeightForWidth())
         self.widgetTask.setSizePolicy(sizePolicy5)
         self.widgetTask.setStyleSheet(u"#listWTask{\n"
-"	color: rgb(255, 255, 255);\n"
+"	font: 12pt \"\u9ed1\u4f53\";\n"
+"	color: rgba(255, 255, 255, .8);\n"
 "	background-color: rgba(66, 66, 78, 1);\n"
-"	border: 5px solid rgba(66, 66, 78, 1);\n"
+"	border: 8px solid rgba(66, 66, 78, 1);\n"
 "	border-radius: 10px;\n"
+"	outline: 0px;\n"
 "}\n"
 "#listWTask::item {\n"
+"	height: 40px;\n"
 "}\n"
 "#listWTask::item:hover {\n"
+"	padding: 6px;\n"
+"	background-color: transparent;\n"
+"	border-left: 3px solid rgba(130, 130, 130, 1);\n"
 "}\n"
 "#listWTask::item:selected {\n"
+"	padding: 8px;\n"
+"	color: rgba(255, 255, 255, 1);\n"
+"	background-color: transparent;\n"
+"	border-left: 3px solid rgba(255, 255, 255, 1);\n"
 "}\n"
 "\n"
-"#pBtnSE{\n"
-"	color: rgb(255, 255, 255);\n"
+"#pBtnSE, #pBtnLog{\n"
+"	width: 50px;\n"
 "	font: 12pt \"\u9ed1\u4f53\";\n"
+"	color: rgb(255, 255, 255);\n"
 "	background-color: rgba(86, 88, 93, 1);\n"
-"	border-radius: 10px;\n"
+"	border-radius: 8px;\n"
 "}\n"
-"#pBtnSE:hover{\n"
+"#pBtnSE:hover, #pBtnLog:hover{\n"
 "	background-color: rgba(86, 88, 93, .5);\n"
 "}")
         self.widgetTask.setFrameShape(QFrame.StyledPanel)
@@ -252,9 +263,9 @@ class Ui_InterfaceUI(object):
         self.fbtn.setSizePolicy(sizePolicy)
         self.hLayoutPBtn = QHBoxLayout(self.fbtn)
         self.hLayoutPBtn.setObjectName(u"hLayoutPBtn")
-        self.horizontalSpacer_3 = QSpacerItem(48, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.hs1 = QSpacerItem(30, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.hLayoutPBtn.addItem(self.horizontalSpacer_3)
+        self.hLayoutPBtn.addItem(self.hs1)
 
         self.pBtnSE = QPushButton(self.fbtn)
         self.pBtnSE.setObjectName(u"pBtnSE")
@@ -263,13 +274,32 @@ class Ui_InterfaceUI(object):
         sizePolicy7.setVerticalStretch(1)
         sizePolicy7.setHeightForWidth(self.pBtnSE.sizePolicy().hasHeightForWidth())
         self.pBtnSE.setSizePolicy(sizePolicy7)
+        self.pBtnSE.setMinimumSize(QSize(0, 0))
         self.pBtnSE.setStyleSheet(u"")
 
         self.hLayoutPBtn.addWidget(self.pBtnSE)
 
-        self.horizontalSpacer_2 = QSpacerItem(48, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.hs2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.hLayoutPBtn.addItem(self.horizontalSpacer_2)
+        self.hLayoutPBtn.addItem(self.hs2)
+
+        self.pBtnLog = QPushButton(self.fbtn)
+        self.pBtnLog.setObjectName(u"pBtnLog")
+        sizePolicy7.setHeightForWidth(self.pBtnLog.sizePolicy().hasHeightForWidth())
+        self.pBtnLog.setSizePolicy(sizePolicy7)
+        font = QFont()
+        font.setFamilies([u"\u9ed1\u4f53"])
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setKerning(True)
+        self.pBtnLog.setFont(font)
+
+        self.hLayoutPBtn.addWidget(self.pBtnLog)
+
+        self.hs3 = QSpacerItem(30, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.hLayoutPBtn.addItem(self.hs3)
 
 
         self.verticalLayout_4.addWidget(self.fbtn)
@@ -329,20 +359,20 @@ class Ui_InterfaceUI(object):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
         self.treeLog = QTreeWidget(self.fLog)
-        font = QFont()
-        font.setPointSize(14)
-        font.setBold(True)
+        font1 = QFont()
+        font1.setPointSize(14)
+        font1.setBold(True)
         __qtreewidgetitem = QTreeWidgetItem()
         __qtreewidgetitem.setTextAlignment(0, Qt.AlignCenter);
-        __qtreewidgetitem.setFont(0, font);
+        __qtreewidgetitem.setFont(0, font1);
         self.treeLog.setHeaderItem(__qtreewidgetitem)
         self.treeLog.setObjectName(u"treeLog")
-        font1 = QFont()
-        font1.setFamilies([u"\u9ed1\u4f53"])
-        font1.setPointSize(11)
-        font1.setBold(False)
-        font1.setItalic(False)
-        self.treeLog.setFont(font1)
+        font2 = QFont()
+        font2.setFamilies([u"\u9ed1\u4f53"])
+        font2.setPointSize(11)
+        font2.setBold(False)
+        font2.setItalic(False)
+        self.treeLog.setFont(font2)
 
         self.horizontalLayout_5.addWidget(self.treeLog)
 
@@ -382,6 +412,7 @@ class Ui_InterfaceUI(object):
         self.pBtnMinimize.setText("")
         self.pBtnClose.setText("")
         self.pBtnSE.setText(QCoreApplication.translate("InterfaceUI", u"\u5f00\u59cb", None))
+        self.pBtnLog.setText(QCoreApplication.translate("InterfaceUI", u"\u65e5\u5fd7", None))
         ___qtreewidgetitem = self.treeLog.headerItem()
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("InterfaceUI", u"\u65e5\u5fd7", None));
     # retranslateUi
