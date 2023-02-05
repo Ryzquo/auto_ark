@@ -4,6 +4,7 @@
 import os
 import sys
 import json
+import ctypes
 import threading
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ark_tools/').replace('\\', '/'))
@@ -47,8 +48,9 @@ class MainWindow(QMainWindow):
         self.ctConnect()
         
         # 脚本线程
-        self.agenThread = threading.Thread(target=self.agenTools.start_ark,
-                                           kwargs={"path_emulator": self.path_emulator})
+        # self.agenThread = threading.Thread(target=self.agenTools.start_ark,
+        #                                    kwargs={"path_emulator": self.path_emulator})
+        self.agenThread = thread_with_exception(self.agenTools, self.path_emulator)
         self.agenThread.setDaemon(True)
         
         # 一些标志
@@ -211,12 +213,15 @@ class MainWindow(QMainWindow):
             self.ui.pBtnSE.setText(u"停止")
             self.ui.stackedWidget.setCurrentIndex(1)
         else:
+            self.agenThread.raise_exception() 
+            self.agenThread.join() 
             self.isRun = False
             self.ui.pBtnSE.setText(u"开始")
             if self.ui.stackedWidget.currentIndex() == 1:
                 self.ui.stackedWidget.setCurrentIndex(0)
-            self.agenThread = threading.Thread(target=self.agenTools.start_ark,
-                                               kwargs={"path_emulator": self.path_emulator})
+            # self.agenThread = threading.Thread(target=self.agenTools.start_ark,
+            #                                    kwargs={"path_emulator": self.path_emulator})
+            self.agenThread = thread_with_exception(self.agenTools, self.path_emulator)
             self.agenThread.setDaemon(True)
             
     def onPBtnLog_clicked(self):
@@ -296,6 +301,33 @@ class MainWindow(QMainWindow):
         self.m_flag = False
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         return super().mouseReleaseEvent(event)
+
+
+class thread_with_exception(threading.Thread):
+    def __init__(self, agenTools: AgenTools, path_emulator: str): 
+        threading.Thread.__init__(self) 
+        self.agenTools = agenTools
+        self.path_emulator = path_emulator
+
+    def run(self): 
+        try: 
+            self.agenTools.start_ark(path_emulator=self.path_emulator)
+        finally: 
+            ...
+		
+    def get_id(self): 
+        if hasattr(self, '_thread_id'): 
+            return self._thread_id 
+        for id, thread in threading._active.items(): 
+            if thread is self: 
+                return id
+
+    def raise_exception(self): 
+        thread_id = self.get_id() 
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 
+                                                         ctypes.py_object(SystemExit)) 
+        if res > 1: 
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0) 
 
 
 if __name__ == '__main__':

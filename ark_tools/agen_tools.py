@@ -5,6 +5,7 @@ import os
 import sys
 import time
 import json
+import threading
 
 sys.path.append(os.path.dirname(__file__).replace('\\', '/'))
 import win_tools
@@ -24,8 +25,6 @@ class AgenTools():
         self.se_json = os.path.join(self.dir, "json/se.json").replace('\\', '/')
         # 启动模拟器时间
         self.startEmulator_time = 20
-        # 结束
-        self.isEnd = False
         
         self.taskFlags = {
             # 启动模拟器
@@ -81,8 +80,6 @@ class AgenTools():
         # 领取奖励
         if self.taskFlags['RECEIVE_AWARD']:
             self.receive_award()
-            
-        self.isEnd = True
         
         
     def stop_ark(self):
